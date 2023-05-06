@@ -25,7 +25,7 @@ final class Router {
         guard let desk = gameEngine.getDesk() else {
             fatalError("GameEngine didn't provide DeskState")
         }
-        deskVC.linkDesk(withPublisher: desk.publisher)
+        deskVC.linkDesk(withDesk: desk)
         navigationContoller.pushViewController(deskVC, animated: true)
     }
     

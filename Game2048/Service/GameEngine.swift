@@ -20,13 +20,11 @@ final class GameEngine {
     private var deskState: Desk? = nil
     
     public init() {
-        if let currentScore = UserDefaults.standard.object(forKey: "deskStateCurrentScore") as? Int,
-           let deskStateValues = UserDefaults.standard.object(forKey: "deskStateValues") as? [[Int]],
+        if let deskStateValues = UserDefaults.standard.object(forKey: "deskStateValues") as? [[Int]],
            let deskStatePreviousValues = UserDefaults.standard.object(forKey: "deskStatePreviousValues") as? [[Int]]
         {
             deskState = {
                 let oldDesk = Desk()
-                oldDesk.currentScore = currentScore
                 oldDesk.values = deskStateValues
                 oldDesk.previousValues = deskStatePreviousValues
                 return oldDesk
@@ -38,7 +36,6 @@ final class GameEngine {
         let newDesk = Desk()
         deskState = newDesk
         _ = addPoint()
-        newDesk.currentScore = newDesk.pointsExpSum()
     }
     
     public func finish() {
@@ -79,9 +76,7 @@ final class GameEngine {
             }
         }
         
-        let success = !addPoint()
-        deskState.currentScore = deskState.pointsExpSum()
-        return success
+        return addPoint()
     }
     
     public func getDesk() -> DeskState? {
@@ -90,8 +85,8 @@ final class GameEngine {
     
     
     private func compressArray(_ arr: [Int]) -> [Int] {
-        if arr[0] == arr[1] && arr[2] == arr[3] {
-            return [arr[0] * 2, arr[2] * 2, 0, 0]
+        if arr[0] == arr[1] && arr[2] == arr[3] && arr[0] != 0 && arr[2] != 0 {
+            return [arr[0] + 1, arr[2] + 1, 0, 0]
         }
         
         var res: [Int] = []
@@ -99,7 +94,7 @@ final class GameEngine {
         for i in 0..<4 {
             if arr[i] > 0 {
                 if !repeated && res.count > 0 && res[res.count - 1] == arr[i] {
-                    res[res.count - 1] *= 2
+                    res[res.count - 1] += 1
                     repeated = true
                 } else {
                     res.append(arr[i])
@@ -123,7 +118,6 @@ final class GameEngine {
                 }
                 if randomX == 0 {
                     deskState.values[i][j] = 1
-                    print("added \(i) \(j)")
                     return true
                 } else {
                     randomX -= 1
@@ -137,25 +131,26 @@ final class GameEngine {
     
     final private class Desk: DeskState {
         
-        private var thisCurrentValue: Int = 0
-        var currentScore: Int {
-            get {
-                thisCurrentValue
-            }
-            set {
-                thisCurrentValue = newValue
-                publisher.send(self)
-            }
-        }
-        var values: [[Int]] = .init(repeating: .init(repeating: 0, count: 4), count: 4)
-        var previousValues: [[Int]] = .init(repeating: .init(repeating: 0, count: 4), count: 4)
+        var values: [[Int]] = {
+            var a: [[Int]] = []
+            (0..<4).forEach { _ in a.append(.init(repeating: 0, count: 4))}
+            return a
+        }()
+        var previousValues: [[Int]]?
         
         func getState() -> [[Int]] {
             return values
         }
         
         func getCurrentScore() -> Int {
-            return currentScore
+            return values.reduce(0) { partialResult, arr in
+                partialResult + arr.reduce(0, { partialResult1, val in
+                    if val == 0 {
+                        return partialResult1
+                    }
+                    return partialResult1 + Int(pow(2.0, Double(val)))
+                })
+            }
         }
         
         func emptyPointsCount() -> Int {
@@ -164,23 +159,15 @@ final class GameEngine {
             }
         }
         
-        func pointsExpSum() -> Int {
-            return values.reduce(0) { partialResult, arr in
-                partialResult + arr.reduce(0, { partialResult1, val in
-                    partialResult1 + Int(pow(2.0, Double(val)))
-                })
-            }
-        }
-        
         func mayContinue() -> Bool {
             return emptyPointsCount() != 0
         }
         
-        private lazy var thisPublisher: CurrentValueSubject<DeskState, Error> = .init(self)
-        var publisher: CurrentValueSubject<DeskState, Error> {
-            get {
-                thisPublisher
+        func getExpValue(x: Int, y: Int) -> Int {
+            if values[x][y] != 0 {
+                return Int(pow(2.0, Double(values[x][y])))
             }
+            return 0
         }
         
     }

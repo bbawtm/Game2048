@@ -65,6 +65,8 @@ final class GameEngineTests: XCTestCase {
         case .top:
             XCTAssertEqual(newState![0][itemIndexTuple.1], 1)
         }
+        
+        XCTAssertEqual(engine.getDesk()!.getCurrentScore(), 4)
     }
 
     func testSingleDirectionSwipe() throws {

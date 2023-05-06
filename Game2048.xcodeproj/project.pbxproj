@@ -25,6 +25,10 @@
 		94C96A092A054826002EC25D /* DeskState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C969F42A04F66E002EC25D /* DeskState.swift */; };
 		94C96A0C2A0681E4002EC25D /* DeskCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94C96A0B2A0681E4002EC25D /* DeskCollectionCell.xib */; };
 		94C96A0E2A0684A7002EC25D /* DeskCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C96A0D2A0684A7002EC25D /* DeskCellView.swift */; };
+		94C96A112A06B085002EC25D /* DeskVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C969FA2A04F752002EC25D /* DeskVC.swift */; };
+		94C96A122A06B0A7002EC25D /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C969FC2A04F7F0002EC25D /* Router.swift */; };
+		94C96A132A06B0A9002EC25D /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C969F82A04F743002EC25D /* MainVC.swift */; };
+		94C96A142A06B0D0002EC25D /* DeskCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C96A0D2A0684A7002EC25D /* DeskCellView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -281,8 +285,12 @@
 				94C96A012A05025A002EC25D /* CoordinatorTests.swift in Sources */,
 				94C96A092A054826002EC25D /* DeskState.swift in Sources */,
 				94C96A022A05040A002EC25D /* Coordinator.swift in Sources */,
+				94C96A142A06B0D0002EC25D /* DeskCellView.swift in Sources */,
+				94C96A122A06B0A7002EC25D /* Router.swift in Sources */,
 				94C96A072A0520F6002EC25D /* GameEngineTests.swift in Sources */,
+				94C96A132A06B0A9002EC25D /* MainVC.swift in Sources */,
 				94C96A082A0540EE002EC25D /* GameEngine.swift in Sources */,
+				94C96A112A06B085002EC25D /* DeskVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,9 +11,8 @@ import Combine
 
 final class DeskVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
-    typealias DeskPublisher = CurrentValueSubject<DeskState, Error>
-    
-    private var deskPublisher: DeskPublisher?
+    private var currentDesk: DeskState?
+    private var subscription: AnyCancellable?
     private var collectionView = UICollectionView(frame: CGRect(), collectionViewLayout: UICollectionViewFlowLayout())
     
     override func viewDidLoad() {
@@ -39,15 +38,26 @@ final class DeskVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             collectionView.heightAnchor.constraint(equalTo: collectionView.widthAnchor, multiplier: 1.0),
             collectionView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
         ])
+        
+        addSwipes()
+        
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(gestureHandler(gesture:)))
+        rightSwipe.direction = .right
+        collectionView.addGestureRecognizer(rightSwipe)
     }
     
-    public func linkDesk(withPublisher publisher: DeskPublisher) {
-        deskPublisher = publisher
+    public func linkDesk(withDesk desk: DeskState) {
+        currentDesk = desk
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         collectionView.reloadData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        subscription?.cancel()
     }
     
     // MARK: - Collection View Settings
@@ -64,10 +74,10 @@ final class DeskVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DeskCell", for: indexPath) as? DeskCellView else {
             fatalError("DeskCell doesn't comform to expected type")
         }
-        guard let deskPublisher else {
+        guard let currentDesk else {
             fatalError("Desk Publisher doesn't provided")
         }
-        let number = deskPublisher.value.getExpValue(x: indexPath.item / 4, y: indexPath.item % 4)
+        let number = currentDesk.getExpValue(x: indexPath.item / 4, y: indexPath.item % 4)
         if number != 0 {
             cell.setNumber(number)
             cell.setColor(.darkGray)
@@ -90,6 +100,52 @@ final class DeskVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         insetForSectionAt section: Int
     ) -> UIEdgeInsets {
         return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+    }
+    
+    // MARK: - Add Gestures
+    
+    private func addSwipes() {
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(gestureHandler(gesture:)))
+        rightSwipe.direction = .right
+        collectionView.addGestureRecognizer(rightSwipe)
+        
+        let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(gestureHandler(gesture:)))
+        leftSwipe.direction = .left
+        collectionView.addGestureRecognizer(leftSwipe)
+        
+        let upSwipe = UISwipeGestureRecognizer(target: self, action: #selector(gestureHandler(gesture:)))
+        upSwipe.direction = .up
+        collectionView.addGestureRecognizer(upSwipe)
+        
+        let downSwipe = UISwipeGestureRecognizer(target: self, action: #selector(gestureHandler(gesture:)))
+        downSwipe.direction = .down
+        collectionView.addGestureRecognizer(downSwipe)
+    }
+    
+    @objc private func gestureHandler(gesture: UIGestureRecognizer) {
+        guard let swipeGesture = gesture as? UISwipeGestureRecognizer else {
+            return
+        }
+        
+        let gameEngine = coordinator.getReference(for: GameEngine.self)
+        var moveDirection: GameEngine.Direction = .right
+        
+        switch swipeGesture.direction {
+        case .down:
+            moveDirection = .bottom
+        case .left:
+            moveDirection = .left
+        case .up:
+            moveDirection = .top
+        default:
+            break
+        }
+        
+        guard gameEngine.move(inDirection: moveDirection) else {
+            print("Error occured")
+            return
+        }
+        collectionView.reloadData()
     }
     
 }
