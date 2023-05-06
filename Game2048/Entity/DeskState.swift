@@ -13,6 +13,7 @@ protocol DeskState {
     func getState() -> [[Int]]
     func getCurrentScore() -> Int
     func mayContinue() -> Bool
+    func getExpValue(x: Int, y: Int) -> Int
     
     var publisher: CurrentValueSubject<DeskState, Error> { get }
 }

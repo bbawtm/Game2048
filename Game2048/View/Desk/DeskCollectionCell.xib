@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="DeskCellView" customModule="Game2048" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view alpha="0.94999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YXf-4E-LEe">
+                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                    <color key="backgroundColor" name="AccentColor"/>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="31" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Cm-QS-kMA">
+                    <rect key="frame" x="38.666666666666664" y="37" width="23" height="26.333333333333329"/>
+                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
+                    <color key="textColor" systemColor="systemBackgroundColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="YXf-4E-LEe" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="3ve-9h-ZWF"/>
+                <constraint firstAttribute="bottom" secondItem="YXf-4E-LEe" secondAttribute="bottom" id="BYp-N3-bCx"/>
+                <constraint firstItem="YXf-4E-LEe" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="NC1-lC-gwR"/>
+                <constraint firstItem="2Cm-QS-kMA" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="d2Y-hU-y8O"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="YXf-4E-LEe" secondAttribute="trailing" id="iyA-bu-bpA"/>
+                <constraint firstItem="2Cm-QS-kMA" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="m1p-dU-WV1"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="coloredView" destination="YXf-4E-LEe" id="IZw-Hc-HOY"/>
+                <outlet property="score" destination="2Cm-QS-kMA" id="8Ll-Vc-pEy"/>
+            </connections>
+            <point key="canvasLocation" x="-77.862595419847324" y="-164.08450704225353"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="AccentColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

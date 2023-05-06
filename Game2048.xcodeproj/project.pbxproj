@@ -23,6 +23,8 @@
 		94C96A072A0520F6002EC25D /* GameEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C96A062A0520F6002EC25D /* GameEngineTests.swift */; };
 		94C96A082A0540EE002EC25D /* GameEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C969EC2A04F097002EC25D /* GameEngine.swift */; };
 		94C96A092A054826002EC25D /* DeskState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C969F42A04F66E002EC25D /* DeskState.swift */; };
+		94C96A0C2A0681E4002EC25D /* DeskCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94C96A0B2A0681E4002EC25D /* DeskCollectionCell.xib */; };
+		94C96A0E2A0684A7002EC25D /* DeskCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C96A0D2A0684A7002EC25D /* DeskCellView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +44,8 @@
 		94C96A002A05025A002EC25D /* CoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorTests.swift; sourceTree = "<group>"; };
 		94C96A042A051897002EC25D /* AchievementsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsVC.swift; sourceTree = "<group>"; };
 		94C96A062A0520F6002EC25D /* GameEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEngineTests.swift; sourceTree = "<group>"; };
+		94C96A0B2A0681E4002EC25D /* DeskCollectionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeskCollectionCell.xib; sourceTree = "<group>"; };
+		94C96A0D2A0684A7002EC25D /* DeskCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeskCellView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +148,8 @@
 			isa = PBXGroup;
 			children = (
 				94C969FA2A04F752002EC25D /* DeskVC.swift */,
+				94C96A0B2A0681E4002EC25D /* DeskCollectionCell.xib */,
+				94C96A0D2A0684A7002EC25D /* DeskCellView.swift */,
 			);
 			path = Desk;
 			sourceTree = "<group>";
@@ -235,6 +241,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94C96A0C2A0681E4002EC25D /* DeskCollectionCell.xib in Resources */,
 				94C969C82A04ED82002EC25D /* LaunchScreen.storyboard in Resources */,
 				94C969C52A04ED82002EC25D /* Assets.xcassets in Resources */,
 			);
@@ -255,6 +262,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				94C969BC2A04ED81002EC25D /* AppDelegate.swift in Sources */,
+				94C96A0E2A0684A7002EC25D /* DeskCellView.swift in Sources */,
 				94C969ED2A04F097002EC25D /* GameEngine.swift in Sources */,
 				94C969FF2A04FB2C002EC25D /* Coordinator.swift in Sources */,
 				94C969BE2A04ED81002EC25D /* SceneDelegate.swift in Sources */,
