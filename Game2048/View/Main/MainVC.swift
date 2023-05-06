@@ -68,6 +68,11 @@ final class MainVC: UIViewController {
             playButton.heightAnchor.constraint(equalToConstant: 60),
             playButton.widthAnchor.constraint(equalToConstant: 60),
         ])
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        maxScore.text = "Maximum score: \(UserDefaults.standard.integer(forKey: "maxScore"))"
         
         if coordinator.getReference(for: GameEngine.self).getDesk() != nil {
             view.addSubview(continueButton)
@@ -76,11 +81,6 @@ final class MainVC: UIViewController {
                 continueButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             ])
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        maxScore.text = "Maximum score: \(UserDefaults.standard.integer(forKey: "maxScore"))"
     }
     
 }

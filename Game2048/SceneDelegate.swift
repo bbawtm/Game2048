@@ -21,6 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         let rootViewController = UINavigationController(rootViewController: MainVC())
+        rootViewController.navigationBar.tintColor = UIColor.label
         window?.rootViewController = rootViewController
         coordinator.setReference(with: Router(navigationContoller: rootViewController))
         window?.makeKeyAndVisible()

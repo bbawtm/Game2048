@@ -8,12 +8,6 @@
 import UIKit
 import Combine
 
-/*
- 
- Board VC (View with desk_view, game_title, current_score, max_score, step_back, home_button)
- 
- */
-
 
 final class GameEngine {
     
@@ -33,6 +27,7 @@ final class GameEngine {
     }
     
     public func start() {
+        finish()
         let newDesk = Desk()
         deskState = newDesk
         _ = addPoint()
@@ -40,13 +35,15 @@ final class GameEngine {
     
     public func finish() {
         deskState = nil
+        UserDefaults.standard.removeObject(forKey: "deskStateValues")
+        UserDefaults.standard.removeObject(forKey: "deskStatePreviousValues")
     }
     
     public func move(inDirection direction: Direction) -> Bool {
         guard let deskState else { return false }
         
         let xRange = Array( (direction == .bottom) ? stride(from: 3, through: 0, by: -1) : stride(from: 0, through: 3, by: 1) )
-        let yRange = Array( (direction == .right) ? stride(from: 3, through: 0, by: -1) : stride(from: 0, through: 3, by: 1) )
+        let yRange = Array( (direction == .right)  ? stride(from: 3, through: 0, by: -1) : stride(from: 0, through: 3, by: 1) )
         
         var extractedArrays: [[Int]] = []
         (0..<4).forEach { _ in extractedArrays.append([]) }
@@ -64,7 +61,7 @@ final class GameEngine {
             extractedArrays[i] = compressArray(extractedArrays[i])
         }
         
-        deskState.previousValues = deskState.values
+        let prev = deskState.values
         
         for i in 0..<4 {
             for j in 0..<4 {
@@ -76,11 +73,25 @@ final class GameEngine {
             }
         }
         
-        return addPoint()
+        if prev == deskState.values {
+            return true
+        }
+        deskState.previousValues = prev
+        let success = addPoint()
+        saveState()
+        return success
     }
     
     public func getDesk() -> DeskState? {
         return deskState
+    }
+    
+    public func stepBack() {
+        guard let deskState,
+              let prev = deskState.previousValues
+        else { return }
+        deskState.values = prev
+        saveState()
     }
     
     
@@ -117,7 +128,7 @@ final class GameEngine {
                     continue
                 }
                 if randomX == 0 {
-                    deskState.values[i][j] = 1
+                    deskState.values[i][j] = Int.random(in: 0..<9) == 0 ? 2 : 1
                     return true
                 } else {
                     randomX -= 1
@@ -127,6 +138,14 @@ final class GameEngine {
         return false
     }
     
+    private func saveState() {
+        guard let deskState, deskState.previousValues != nil else { return }
+        UserDefaults.standard.setValue(deskState.values, forKey: "deskStateValues")
+        UserDefaults.standard.setValue(deskState.previousValues, forKey: "deskStatePreviousValues")
+        if UserDefaults.standard.integer(forKey: "maxScore") < deskState.getCurrentScore() {
+            UserDefaults.standard.setValue(deskState.getCurrentScore(), forKey: "maxScore")
+        }
+    }
     
     
     final private class Desk: DeskState {
@@ -136,7 +155,7 @@ final class GameEngine {
             (0..<4).forEach { _ in a.append(.init(repeating: 0, count: 4))}
             return a
         }()
-        var previousValues: [[Int]]?
+        var previousValues: [[Int]]? = nil
         
         func getState() -> [[Int]] {
             return values
@@ -148,9 +167,19 @@ final class GameEngine {
                     if val == 0 {
                         return partialResult1
                     }
-                    return partialResult1 + Int(pow(2.0, Double(val)))
+                    return partialResult1 + scoreFrom(num: Int(pow(2.0, Double(val))))
                 })
             }
+        }
+        
+        private func scoreFrom(num: Int) -> Int {
+            if num <= 2 {
+                return 0
+            }
+            if num == 4 {
+                return 4
+            }
+            return num + 2 * scoreFrom(num: num / 2)
         }
         
         func emptyPointsCount() -> Int {
@@ -159,11 +188,11 @@ final class GameEngine {
             }
         }
         
-        func mayContinue() -> Bool {
-            return emptyPointsCount() != 0
+        func getNormValue(_ x: Int, _ y: Int) -> Int {
+            return values[x][y]
         }
         
-        func getExpValue(x: Int, y: Int) -> Int {
+        func getExpValue(_ x: Int, _ y: Int) -> Int {
             if values[x][y] != 0 {
                 return Int(pow(2.0, Double(values[x][y])))
             }

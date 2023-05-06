@@ -57,16 +57,17 @@ final class GameEngineTests: XCTestCase {
         
         switch direction {
         case .bottom:
-            XCTAssertEqual(newState![3][itemIndexTuple.1], 1)
+            XCTAssertTrue(newState![3][itemIndexTuple.1] == 1 || newState![3][itemIndexTuple.1] == 2)
         case .left:
-            XCTAssertEqual(newState![itemIndexTuple.0][0], 1)
+            XCTAssertTrue(newState![itemIndexTuple.0][0] == 1 || newState![itemIndexTuple.0][0] == 2)
         case .right:
-            XCTAssertEqual(newState![itemIndexTuple.0][3], 1)
+            XCTAssertTrue(newState![itemIndexTuple.0][3] == 1 || newState![itemIndexTuple.0][3] == 2)
         case .top:
-            XCTAssertEqual(newState![0][itemIndexTuple.1], 1)
+            XCTAssertTrue(newState![0][itemIndexTuple.1] == 1 || newState![0][itemIndexTuple.1] == 2)
         }
         
-        XCTAssertEqual(engine.getDesk()!.getCurrentScore(), 4)
+        let score = engine.getDesk()!.getCurrentScore()
+        XCTAssertTrue(score == 2 || score == 4 || score == 6 || score == 8)
     }
 
     func testSingleDirectionSwipe() throws {

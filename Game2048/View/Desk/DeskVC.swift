@@ -13,7 +13,68 @@ final class DeskVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     
     private var currentDesk: DeskState?
     private var subscription: AnyCancellable?
-    private var collectionView = UICollectionView(frame: CGRect(), collectionViewLayout: UICollectionViewFlowLayout())
+    
+    private var collectionView: UICollectionView = {
+        let view = UICollectionView(frame: CGRect(), collectionViewLayout: UICollectionViewFlowLayout())
+        
+        view.register(UINib(nibName: "DeskCollectionCell", bundle: .main), forCellWithReuseIdentifier: "DeskCell")
+        view.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "collectionCell")
+        
+        view.layer.cornerRadius = 8
+        view.layer.borderColor = UIColor.label.cgColor
+        view.layer.borderWidth = 1
+        view.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private let scoreField: UILabel = {
+        let lbl = UILabel()
+        lbl.textColor = .label
+        lbl.font = .systemFont(ofSize: 40)
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        return lbl
+    }()
+    
+    private let maxScore: UILabel = {
+        let view = UILabel()
+        view.textColor = .label
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private lazy var startNewGame: UIButton = {
+        let btn = UIButton(configuration: .borderless(), primaryAction: UIAction(handler: { _ in
+            let alert = UIAlertController(title: "Start again?", message: "The current account will be saved.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            alert.addAction(UIAlertAction(title: "Go", style: .default, handler: { _ in
+                let gameEngine = coordinator.getReference(for: GameEngine.self)
+                gameEngine.start()
+                self.linkDesk(withDesk: gameEngine.getDesk()!)
+                self.collectionView.reloadData()
+            }))
+            self.present(alert, animated: true)
+        }))
+        let btnImage = UIImage(systemName: "arrow.triangle.2.circlepath.circle.fill")?.withTintColor(.label, renderingMode: .alwaysOriginal)
+        btn.setImage(btnImage, for: .normal)
+        btn.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 25), forImageIn: .normal)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
+    }()
+    
+    private lazy var stepBack: UIButton = {
+        let btn = UIButton(configuration: .borderless(), primaryAction: UIAction(handler: { _ in
+            let gameEngine = coordinator.getReference(for: GameEngine.self)
+            gameEngine.stepBack()
+            self.collectionView.reloadData()
+        }))
+        let btnImage = UIImage(systemName: "arrowshape.turn.up.left.circle.fill")?.withTintColor(.label, renderingMode: .alwaysOriginal)
+        btn.setImage(btnImage, for: .normal)
+        btn.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 24), forImageIn: .normal)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,21 +83,29 @@ final class DeskVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         collectionView.delegate = self
         collectionView.dataSource = self
         
-        collectionView.register(UINib(nibName: "DeskCollectionCell", bundle: .main), forCellWithReuseIdentifier: "DeskCell")
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "collectionCell")
-        
-        collectionView.layer.cornerRadius = 8
-        collectionView.layer.borderColor = UIColor.label.cgColor
-        collectionView.layer.borderWidth = 1
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        view.addSubview(scoreField)
+        view.addSubview(maxScore)
+        view.addSubview(startNewGame)
+        view.addSubview(stepBack)
         
         NSLayoutConstraint.activate([
             collectionView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16),
             collectionView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16),
             collectionView.heightAnchor.constraint(equalTo: collectionView.widthAnchor, multiplier: 1.0),
             collectionView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            
+            scoreField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
+            scoreField.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16),
+            
+            maxScore.topAnchor.constraint(equalTo: scoreField.bottomAnchor, constant: 12),
+            maxScore.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16),
+            
+            startNewGame.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16),
+            startNewGame.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 30),
+            
+            stepBack.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16),
+            stepBack.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 30),
         ])
         
         addSwipes()
@@ -63,6 +132,8 @@ final class DeskVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     // MARK: - Collection View Settings
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
+        scoreField.text = "Score: \(currentDesk?.getCurrentScore() ?? 0)"
+        maxScore.text = "Max score: \(UserDefaults.standard.integer(forKey: "maxScore"))"
         return 1
     }
     
@@ -77,10 +148,12 @@ final class DeskVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         guard let currentDesk else {
             fatalError("Desk Publisher doesn't provided")
         }
-        let number = currentDesk.getExpValue(x: indexPath.item / 4, y: indexPath.item % 4)
+        let x = indexPath.item / 4
+        let y = indexPath.item % 4
+        let number = currentDesk.getExpValue(x, y)
         if number != 0 {
             cell.setNumber(number)
-            cell.setColor(.darkGray)
+            cell.setColor(.black.withAlphaComponent(min(0.1 + CGFloat(currentDesk.getNormValue(x, y)) / 11, 1.0)))
             return cell
         }
         return collectionView.dequeueReusableCell(withReuseIdentifier: "collectionCell", for: indexPath)

@@ -15,6 +15,7 @@ final class DeskCellView: UICollectionViewCell {
     
     public func setNumber(_ value: Int) {
         score.text = String(value)
+        score.textColor = .systemBackground
     }
     
     public func setColor(_ color: UIColor) {
