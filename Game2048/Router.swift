@@ -16,9 +16,16 @@ final class Router {
         self.navigationContoller = navigationContoller
     }
     
-    public func switchToDesk(_ desk: DeskState) {
+    public func switchToDesk(shouldMakeNewDesk: Bool) {
+        let gameEngine = coordinator.getReference(for: GameEngine.self)
+        if shouldMakeNewDesk || gameEngine.getDesk() == nil {
+            gameEngine.start()
+        }
         let deskVC = coordinator.getReference(for: DeskVC.self)
-        deskVC.reloadData(forDesk: desk)
+        guard let desk = gameEngine.getDesk() else {
+            fatalError("GameEngine didn't provide DeskState")
+        }
+        deskVC.linkDesk(withPublisher: desk.publisher)
         navigationContoller.pushViewController(deskVC, animated: true)
     }
     

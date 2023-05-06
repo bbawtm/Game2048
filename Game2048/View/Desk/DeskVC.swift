@@ -6,16 +6,26 @@
 //
 
 import UIKit
+import Combine
 
 
 final class DeskVC: UIViewController {
+    
+    typealias DeskPublisher = CurrentValueSubject<DeskState, Error>
+    
+    private var deskPublisher: DeskPublisher?
     
     override func viewDidLoad() {
         coordinator.setReference(with: self)
     }
     
-    public func reloadData(forDesk desk: DeskState) {
-        
+    public func linkDesk(withPublisher publisher: DeskPublisher) {
+        deskPublisher = publisher
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print(deskPublisher?.value.getCurrentScore())
     }
     
 }

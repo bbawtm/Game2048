@@ -6,22 +6,11 @@
 //
 
 import UIKit
+import Combine
 
 /*
  
- Main VC (View with game_title, achievements, start_button, continue_button)
- 
- Achievements VC (View with maximum_score, time_spent, swipes_count)
- 
  Board VC (View with desk_view, game_title, current_score, max_score, step_back, home_button)
- 
- //
- 
- On termination app saves the board state
- 
- App stores:
- 1. Achievements(maximum_score, time_spent, swipes_count)
- 2. DeskState(current_score, values, prev_values)
  
  */
 
@@ -46,8 +35,14 @@ final class GameEngine {
     }
     
     public func start() {
-        deskState = Desk()
+        let newDesk = Desk()
+        deskState = newDesk
         _ = addPoint()
+        newDesk.currentScore = newDesk.pointsExpSum()
+    }
+    
+    public func finish() {
+        deskState = nil
     }
     
     public func move(inDirection direction: Direction) -> Bool {
@@ -84,7 +79,9 @@ final class GameEngine {
             }
         }
         
-        return addPoint()
+        let success = !addPoint()
+        deskState.currentScore = deskState.pointsExpSum()
+        return success
     }
     
     public func getDesk() -> DeskState? {
@@ -140,7 +137,16 @@ final class GameEngine {
     
     final private class Desk: DeskState {
         
-        var currentScore: Int = 0
+        private var thisCurrentValue: Int = 0
+        var currentScore: Int {
+            get {
+                thisCurrentValue
+            }
+            set {
+                thisCurrentValue = newValue
+                publisher.send(self)
+            }
+        }
         var values: [[Int]] = .init(repeating: .init(repeating: 0, count: 4), count: 4)
         var previousValues: [[Int]] = .init(repeating: .init(repeating: 0, count: 4), count: 4)
         
@@ -158,8 +164,23 @@ final class GameEngine {
             }
         }
         
+        func pointsExpSum() -> Int {
+            return values.reduce(0) { partialResult, arr in
+                partialResult + arr.reduce(0, { partialResult1, val in
+                    partialResult1 + Int(pow(2.0, Double(val)))
+                })
+            }
+        }
+        
         func mayContinue() -> Bool {
             return emptyPointsCount() != 0
+        }
+        
+        private lazy var thisPublisher: CurrentValueSubject<DeskState, Error> = .init(self)
+        var publisher: CurrentValueSubject<DeskState, Error> {
+            get {
+                thisPublisher
+            }
         }
         
     }

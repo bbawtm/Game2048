@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import Combine
 
 
 protocol DeskState {
     func getState() -> [[Int]]
     func getCurrentScore() -> Int
     func mayContinue() -> Bool
+    
+    var publisher: CurrentValueSubject<DeskState, Error> { get }
 }

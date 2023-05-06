@@ -26,6 +26,7 @@ final class Coordinator {
     
     public init() {
         setReference(with: GameEngine())
+        setReference(with: DeskVC())
     }
     
 }
