@@ -19,7 +19,6 @@
 		94C969FF2A04FB2C002EC25D /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C969FE2A04FB2C002EC25D /* Coordinator.swift */; };
 		94C96A012A05025A002EC25D /* CoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C96A002A05025A002EC25D /* CoordinatorTests.swift */; };
 		94C96A022A05040A002EC25D /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C969FE2A04FB2C002EC25D /* Coordinator.swift */; };
-		94C96A052A051897002EC25D /* AchievementsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C96A042A051897002EC25D /* AchievementsVC.swift */; };
 		94C96A072A0520F6002EC25D /* GameEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C96A062A0520F6002EC25D /* GameEngineTests.swift */; };
 		94C96A082A0540EE002EC25D /* GameEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C969EC2A04F097002EC25D /* GameEngine.swift */; };
 		94C96A092A054826002EC25D /* DeskState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C969F42A04F66E002EC25D /* DeskState.swift */; };
@@ -46,7 +45,6 @@
 		94C969FC2A04F7F0002EC25D /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		94C969FE2A04FB2C002EC25D /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		94C96A002A05025A002EC25D /* CoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorTests.swift; sourceTree = "<group>"; };
-		94C96A042A051897002EC25D /* AchievementsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsVC.swift; sourceTree = "<group>"; };
 		94C96A062A0520F6002EC25D /* GameEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEngineTests.swift; sourceTree = "<group>"; };
 		94C96A0B2A0681E4002EC25D /* DeskCollectionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeskCollectionCell.xib; sourceTree = "<group>"; };
 		94C96A0D2A0684A7002EC25D /* DeskCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeskCellView.swift; sourceTree = "<group>"; };
@@ -127,7 +125,6 @@
 			children = (
 				94C969F62A04F729002EC25D /* Main */,
 				94C969F72A04F733002EC25D /* Desk */,
-				94C96A032A05185E002EC25D /* Achievements */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -156,14 +153,6 @@
 				94C96A0D2A0684A7002EC25D /* DeskCellView.swift */,
 			);
 			path = Desk;
-			sourceTree = "<group>";
-		};
-		94C96A032A05185E002EC25D /* Achievements */ = {
-			isa = PBXGroup;
-			children = (
-				94C96A042A051897002EC25D /* AchievementsVC.swift */,
-			);
-			path = Achievements;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -270,7 +259,6 @@
 				94C969ED2A04F097002EC25D /* GameEngine.swift in Sources */,
 				94C969FF2A04FB2C002EC25D /* Coordinator.swift in Sources */,
 				94C969BE2A04ED81002EC25D /* SceneDelegate.swift in Sources */,
-				94C96A052A051897002EC25D /* AchievementsVC.swift in Sources */,
 				94C969FD2A04F7F0002EC25D /* Router.swift in Sources */,
 				94C969F52A04F66E002EC25D /* DeskState.swift in Sources */,
 				94C969F92A04F743002EC25D /* MainVC.swift in Sources */,

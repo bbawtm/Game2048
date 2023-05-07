@@ -153,7 +153,7 @@ final class DeskVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         let number = currentDesk.getExpValue(x, y)
         if number != 0 {
             cell.setNumber(number)
-            cell.setColor(.black.withAlphaComponent(min(0.1 + CGFloat(currentDesk.getNormValue(x, y)) / 11, 1.0)))
+            cell.setColor(.label.withAlphaComponent(min(0.1 + CGFloat(currentDesk.getNormValue(x, y)) / 11, 1.0)))
             return cell
         }
         return collectionView.dequeueReusableCell(withReuseIdentifier: "collectionCell", for: indexPath)
