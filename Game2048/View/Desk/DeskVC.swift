@@ -12,7 +12,6 @@ import Combine
 final class DeskVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     private var currentDesk: DeskState?
-    private var subscription: AnyCancellable?
     
     private var collectionView: UICollectionView = {
         let view = UICollectionView(frame: CGRect(), collectionViewLayout: UICollectionViewFlowLayout())
@@ -122,11 +121,6 @@ final class DeskVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         collectionView.reloadData()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        subscription?.cancel()
     }
     
     // MARK: - Collection View Settings

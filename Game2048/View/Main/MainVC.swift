@@ -49,6 +49,21 @@ final class MainVC: UIViewController {
         return button
     }()
     
+    private let toggleTheme: UIButton = {
+        var config = UIButton.Configuration.plain()
+        config.title = "Toggle theme"
+        let button = UIButton(configuration: config, primaryAction: UIAction(handler: { _ in
+            var current = UIScreen.main.traitCollection.userInterfaceStyle
+            if let overrided = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window?.overrideUserInterfaceStyle {
+                current = overrided
+            }
+            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window?.overrideUserInterfaceStyle = current == .dark ? .light : .dark
+        }))
+        button.tintColor = .label
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         coordinator.setReference(with: self)
@@ -56,6 +71,7 @@ final class MainVC: UIViewController {
         view.addSubview(gameTitle)
         view.addSubview(maxScore)
         view.addSubview(playButton)
+        view.addSubview(toggleTheme)
         view.backgroundColor = .systemBackground
         
         NSLayoutConstraint.activate([
@@ -64,9 +80,11 @@ final class MainVC: UIViewController {
             maxScore.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             maxScore.topAnchor.constraint(equalTo: gameTitle.bottomAnchor, constant: 10),
             playButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            playButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -150),
+            playButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -170),
             playButton.heightAnchor.constraint(equalToConstant: 60),
             playButton.widthAnchor.constraint(equalToConstant: 60),
+            toggleTheme.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            toggleTheme.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
         ])
     }
     
