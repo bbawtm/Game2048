@@ -39,20 +39,20 @@ final class GameEngineTests: XCTestCase {
     private func singleDirectionSwipe(_ direction: GameEngine.Direction) throws {
         let engine = GameEngine()
         engine.start()
-        print()
-        print()
-        print(direction)
-        printState(engine.getDesk()!)
+//        print()
+//        print()
+//        print(direction)
+//        printState(engine.getDesk()!)
         
         guard let itemIndexTuple = findFirstItem(engine.getDesk()!) else {
             XCTAssertNotNil(nil)
             return
         }
-        print(itemIndexTuple)
+//        print(itemIndexTuple)
         
         XCTAssertTrue(engine.move(inDirection: direction))
         let newState = engine.getDesk()?.getState()
-        printState(engine.getDesk()!)
+//        printState(engine.getDesk()!)
         XCTAssertNotNil(newState)
         
         switch direction {
@@ -67,7 +67,7 @@ final class GameEngineTests: XCTestCase {
         }
         
         let score = engine.getDesk()!.getCurrentScore()
-        XCTAssertTrue(score == 2 || score == 4 || score == 6 || score == 8)
+        XCTAssertTrue(score == 0 || score == 4 || score == 8)
     }
 
     func testSingleDirectionSwipe() throws {

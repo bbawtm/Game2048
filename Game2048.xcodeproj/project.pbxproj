@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		94431B442A0B96ED00BA204B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C969BD2A04ED81002EC25D /* SceneDelegate.swift */; };
 		94C969BC2A04ED81002EC25D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C969BB2A04ED81002EC25D /* AppDelegate.swift */; };
 		94C969BE2A04ED81002EC25D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C969BD2A04ED81002EC25D /* SceneDelegate.swift */; };
 		94C969C52A04ED82002EC25D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94C969C42A04ED82002EC25D /* Assets.xcassets */; };
@@ -275,6 +276,7 @@
 				94C96A022A05040A002EC25D /* Coordinator.swift in Sources */,
 				94C96A142A06B0D0002EC25D /* DeskCellView.swift in Sources */,
 				94C96A122A06B0A7002EC25D /* Router.swift in Sources */,
+				94431B442A0B96ED00BA204B /* SceneDelegate.swift in Sources */,
 				94C96A072A0520F6002EC25D /* GameEngineTests.swift in Sources */,
 				94C96A132A06B0A9002EC25D /* MainVC.swift in Sources */,
 				94C96A082A0540EE002EC25D /* GameEngine.swift in Sources */,
